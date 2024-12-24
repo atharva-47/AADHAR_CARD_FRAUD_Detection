@@ -3,6 +3,7 @@ import easyocr
 import cv2
 import os
 import re
+import pandas as pd
 
 def classify_document(image_path):
     # Load the trained YOLO classification model
@@ -85,13 +86,10 @@ def process_folder(folder_path):
                             "data": extracted_data
                         }
                     else:
-                        # Merge the extracted data
+                        # Merge the extracted data, excluding duplicates
                         for key, value in extracted_data.items():
                             if key not in aggregated_results[base_serial_number]["data"]:
                                 aggregated_results[base_serial_number]["data"][key] = value
-                            else:
-                                # Handle duplicate keys if necessary
-                                aggregated_results[base_serial_number]["data"][key] += f" {value}"
                 else:
                     if base_serial_number not in aggregated_results:
                         aggregated_results[base_serial_number] = {
@@ -117,7 +115,6 @@ def process_folder(folder_path):
                     aggregated_results[base_serial_number]["data"] = {}  # Ensure the 'data' key is present
 
     return aggregated_results
-
 
 if __name__ == "__main__":
     # Test with a folder of images

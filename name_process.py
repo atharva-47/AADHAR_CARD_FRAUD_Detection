@@ -19,22 +19,25 @@ def process_excel(input_file, output_file, folder_path):
         # Find the corresponding extracted data
         if sr_no in extracted_data:
             if extracted_data[sr_no]['status'] == 'success':
+                df.at[index, 'Document Type'] = "Aaadhar"
                 extracted_names = extracted_data[sr_no]['data'].get('name', '')
                 if extracted_names:
                     # Perform name matching
                     match_result, score = overall_match_score(extracted_names, input_name)
                     df.at[index, 'Name extracted from OVD'] = extracted_names
                     df.at[index, 'Name match percentage'] = score * 100
-                    df.at[index, 'Name Match Score'] = score
+                    df.at[index, 'Name Match Score'] = score *100
                 else:
                     df.at[index, 'Name extracted from OVD'] = ''
                     df.at[index, 'Name match percentage'] = 0
                     df.at[index, 'Name Match Score'] = 0
             else:
+                df.at[index, 'Document Type'] = "Not Aaadhar"
                 df.at[index, 'Name extracted from OVD'] = ''
                 df.at[index, 'Name match percentage'] = 0
                 df.at[index, 'Name Match Score'] = 0
         else:
+            df.at[index, 'Document Type'] = "Not Aaadhar"
             df.at[index, 'Name extracted from OVD'] = ''
             df.at[index, 'Name match percentage'] = 0
             df.at[index, 'Name Match Score'] = 0
